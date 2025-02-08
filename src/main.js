@@ -6,8 +6,10 @@ import router from './router'
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import './assets/main.css';
+import store from './store'; 
 
 const app = createApp(App)
+app.use(store);
 app.use(PrimeVue, {
     theme: {
         preset: Aura,

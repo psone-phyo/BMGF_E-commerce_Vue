@@ -2,12 +2,16 @@
   <Layout>
     <div class="my-10 gap-3">
       <div class="">
-        <div class="flex justify-end text-lg mb-5">
+        <div class="flex justify-between text-lg mb-5">
           <router-link :to="{ name: 'createProduct' }">
             <span class="bg-white p-2 rounded-md hover:bg-gray-100"
               >Create Product</span
             >
           </router-link>
+          <form @submit.prevent="handleSearch">
+            <input type="text" name="" id="" class="p-1 rounded-md mr-2" v-model="searchKey">
+            <button class="p-1 bg-green-400 hover:bg-green-500 rounded-md" >Search</button>
+          </form>
         </div>
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
@@ -107,6 +111,7 @@ const router = useRouter();
 const category = ref('');
 const productList = ref([]);
 const btndisabled = ref(false);
+const searchKey = ref('');
 
 onMounted(async () => {
     try{
@@ -130,12 +135,22 @@ const handleDelete = async(id) => {
   }
 }
 
+const handleSearch = () => {
+  try{    
+    getproduct();
+  }catch(error){
+    console.log(error);
+    
+  }
+  
+}
+
 const handleEdit = async(id) => {
   router.push({name: 'editProduct', params: {id: id}})
 }
 
-const getproduct = async () => {
-  const res = await axiosInstance.get('/api/product');
+const getproduct = async () => {  
+  const res = await axiosInstance.get(`/api/product?searchKey=${searchKey.value}`);
       if (res.data){
         productList.value = res.data.data;
       }
