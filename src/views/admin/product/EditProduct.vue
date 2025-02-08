@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <h1 class="text-center font-bold text-3xl my-5">Create Product</h1>
+    <h1 class="text-center font-bold text-3xl my-5">Edit Product</h1>
     <div class="flex justify-center items-center">
       <Form
         @submit="onSubmit"
@@ -16,6 +16,7 @@
               name="name"
               class="p-2 rounded-md text-md"
               placeholder="Enter Name"
+              v-model="product.name"
             />
             <ErrorMessage name="name" class="text-red-500" />
           </div>
@@ -26,6 +27,7 @@
               type="text"
               class="p-2 rounded-md text-md"
               placeholder="Enter Price"
+              v-model="product.price"
             />
             <ErrorMessage name="price" class="text-red-500" />
           </div>
@@ -38,6 +40,7 @@
             name="description"
             class="p-2 rounded-md text-md"
             placeholder="Enter Description"
+            v-model="product.description"
           />
           <ErrorMessage name="description" class="text-red-500" />
         </div>
@@ -49,6 +52,7 @@
               as="select"
               name="category_id"
               class="p-2 rounded-md text-md"
+              v-model="product.category_id"
             >
               <option disabled value="">Please select one</option>
               <option
@@ -68,6 +72,7 @@
               type="text"
               class="p-2 rounded-md text-md"
               placeholder="Enter Stock"
+              v-model="product.stock"
             />
             <ErrorMessage name="stock" class="text-red-500" />
           </div>
@@ -88,17 +93,16 @@
           />
         </div>
 
-        <ErrorMessage name="photo" class="text-red-500" />
-
-        <div v-if="filePreview" class="flex justify-center">
+        <div v-if="filePreview || product.photo" class="flex justify-center">
           <img
             id="file-preview"
             class="w-full object-cover my-4"
-            :src="filePreview"
+            :src="filePreview || product.photo"
             alt="Preview"
           />
         </div>
 
+        <ErrorMessage name="photo" class="text-red-500" />
         <Button type="submit" :disabled="btndisabled">Update</Button>
       </Form>
     </div>
@@ -113,13 +117,18 @@ import axiosInstance from "@/utils/axios";
 import { useForm, Field, Form, ErrorMessage } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { useRouter } from "vue-router";
-// Reactive variables
+import { useRouter, useRoute } from "vue-router";
+
 const filePreview = ref("");
 const categoryList = ref([]);
 const router = useRouter();
 const btndisabled = ref(false);
-// File Validation Schema
+const route = useRoute();
+const id = route.params.id;
+
+const product = ref({});
+
+
 const validationSchema = toTypedSchema(
   zod.object({
     name: zod.string().min(1, { message: "Product Name is required" }),
@@ -134,43 +143,82 @@ const validationSchema = toTypedSchema(
       .number({ message: "Stock must be number" })
       .min(1, { message: "Stock must be a valid number and at least 1" }),
     photo: zod
-      .instanceof(File, { message: "File is required" }) // Ensure it's a file
-      .refine((file) => file.size < 2 * 1024 * 1024, {
+      .instanceof(File)
+      .optional()
+      .refine((file) => !file || file.size < 2 * 1024 * 1024, {
         message: "File size must be under 2MB",
       }) // Max 2MB
-      .refine((file) => ["image/png", "image/jpeg"].includes(file.type), {
-        message: "Only PNG or JPEG images allowed",
-      }),
+      .refine(
+        (file) => !file || ["image/png", "image/jpeg"].includes(file.type),
+        {
+          message: "Only PNG or JPEG images allowed",
+        }
+      ),
   })
 );
 
-// const { handleSubmit } = useForm({ validationSchema });
+const getCategory = async () => {
+  try {
+    const res = await axiosInstance.get("/api/category");
+    categoryList.value = res.data?.data || [];
+  } catch (error) {
+    console.error("Error: " + error.message);
+  }
+};
+
+const getProduct = async () => {
+    try{
+        const res = await axiosInstance.get(`/api/product/get/${id}`);
+        if (res.data.data){
+            product.value = res.data.data[0];
+        }
+    }catch(error){
+        router.push({name: 'product'})
+    }
+        
+};
+
+onMounted(async () => {
+  await getCategory();
+  await getProduct();
+});
 
 const onSubmit = async (values) => {
   try {
+    let form = {};
     btndisabled.value = true;
-    const res = await axiosInstance.post(
-      "/api/product/image/upload",
-      { photo: values.photo },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    if (values.photo) {
+      const res = await axiosInstance.post(
+        "/api/product/image/upload",
+        { photo: values.photo },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (res.data.link) {
+            form = {
+          name: values.name,
+          category_id: values.category_id,
+          price: values.price,
+          description: values.description,
+          stock: values.stock,
+          photo: res.data.link,
+        };
       }
-    );
-    if (res.data.link) {
-      const form = {
+    } else {
+        form = {
         name: values.name,
         category_id: values.category_id,
         price: values.price,
         description: values.description,
         stock: values.stock,
-        photo: res.data.link,
       };
-      const res1 = await axiosInstance.post("/api/product/create", form);
-      if (res1.data.success) {
-        router.push({ name: "product" });
-      }
+    }
+    const res1 = await axiosInstance.put(`/api/product/update/${id}`, form);
+    if (res1.data.success) {
+      router.push({ name: "product" });
     }
   } catch (error) {
     console.log("error", error);
@@ -189,13 +237,4 @@ const handleFileUpload = (event, setFieldValue) => {
   };
   reader.readAsDataURL(file);
 };
-
-onMounted(async () => {
-  try {
-    const res = await axiosInstance.get("/api/category");
-    categoryList.value = res.data?.data || [];
-  } catch (error) {
-    console.error("Error: " + error.message);
-  }
-});
 </script>

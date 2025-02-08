@@ -35,7 +35,7 @@
                                 <router-link :to="{ name: 'editcategory', params: { id: categoryItem.id } }" class="bg-gray-200 text-black p-2 rounded-md">
                                     Edit
                                 </router-link>
-                                <button class="bg-red-500 text-black p-2 rounded-md" @click="handleDelete(categoryItem.id)">
+                                <button class="bg-red-500 text-black p-2 rounded-md" @click="handleDelete(categoryItem.id)" :disabled="btndisabled">
                                     Delete
                                 </button>
                             </div>
@@ -55,7 +55,7 @@
   import axiosInstance from '@/utils/axios';
   const category = ref('');
   const categories = ref([]);
-  
+  const btndisabled = ref(false);
   // Fetch categories on mount
   onMounted(async () => {
     try {
@@ -82,12 +82,13 @@
 
   const handleDelete = async (id) => {
     try{
+      btndisabled.value=true;
         const res = await axiosInstance.delete(`/api/category/delete/${id}`);
         if (res.data.success){
             const fetchRes = await axiosInstance.get('/api/category');
             categories.value = fetchRes.data.data;
+            btndisabled.value=false;
         }
-        
     }catch (error) {
       console.error('Error creating category:', error);
     }
