@@ -39,10 +39,8 @@ onMounted(()=>{
 
 const getData = async () => {
   const res = await axiosInstance.get('api/dashboard/get');
-  data.value = res.data;
-  console.log(res.data);
-  
-  
+  data.value = res.data;  
+
 }
 </script>
 

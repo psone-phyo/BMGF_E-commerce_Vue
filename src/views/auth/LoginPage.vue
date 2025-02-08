@@ -66,7 +66,6 @@ const onSubmit = async () => {
         }
     }catch (error) {
             if (error.response.data) {
-                
                 if (error.response.data.error){
                     emailError.value=error.response.data.error.email;
                 }

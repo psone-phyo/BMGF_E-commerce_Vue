@@ -10,6 +10,9 @@
               </a>
           </template>
           <template #end>
+            <button class="hover:bg-gray-200 rounded-md p-2" @click="handleLogout">
+            Log out
+          </button>
           </template>
       </Menubar>
       <div class="mx-5 lg:mx-20">
@@ -43,6 +46,11 @@ const items = ref([
         label: 'Order',
     }
 ]);
+
+const handleLogout = () => {
+    localStorage.removeItem('Token');
+    router.push('/login');
+}
 </script >
 <style>
 

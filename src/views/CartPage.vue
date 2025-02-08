@@ -1,6 +1,7 @@
 <template>
     <Layout>
-    <table class="min-w-full divide-y divide-gray-200 mt-10">
+      <div class="mx-5">
+        <table class="min-w-full divide-y divide-gray-200 mt-10">
       <thead class="bg-gray-50">
         <tr>
           <th
@@ -68,10 +69,13 @@
         </tr>
       </tbody>
     </table>
-
     <div class="flex justify-end items-center my-5">
         <Button :disabled="!existed" @click="handleCheckout">Checkout</Button>
     </div>
+      </div>
+    
+
+
 </Layout>
   </template>
   
