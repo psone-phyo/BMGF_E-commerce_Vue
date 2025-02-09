@@ -9,7 +9,7 @@
         class="flex flex-col w-full lg:w-1/2"
         enctype="multipart/form-data"
       >
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3">
           <div class="flex flex-col">
             <label class="text-lg mb-1">Product Name</label>
             <Field
@@ -42,7 +42,7 @@
           <ErrorMessage name="description" class="text-red-500" />
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3">
           <div class="flex flex-col">
             <label class="text-lg mb-1">Category</label>
             <Field

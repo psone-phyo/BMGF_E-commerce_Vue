@@ -25,7 +25,7 @@
 <script setup>
 import Menubar from 'primevue/menubar';
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import {useRouter} from 'vue-router';
 const router = useRouter(); 
 
@@ -43,7 +43,8 @@ const items = ref([
         command: () => {router.push({name: 'product'})}
     },
     {
-        label: 'Order',
+        label: 'Orders',
+        command: () => {router.push({name: 'orders'})}
     }
 ]);
 
@@ -51,6 +52,16 @@ const handleLogout = () => {
     localStorage.removeItem('Token');
     router.push('/login');
 }
+
+const middleware = () => {
+  if (!localStorage.getItem('Token')){
+    router.push({name: 'login'})
+  }
+}
+
+onMounted(()=>{
+  middleware();
+})
 </script >
 <style>
 

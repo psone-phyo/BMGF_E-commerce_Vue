@@ -84,7 +84,9 @@ import Button from "primevue/button";
   import Layout from './MasterLayout.vue'
   import { onMounted, ref } from 'vue';
 import axiosInstance from "@/utils/axios";
-  
+  import { useRouter } from "vue-router";
+
+  const router = useRouter();
   const CartItems = ref([]);
   const existed = ref(false);
   const getCart = () => {
@@ -97,7 +99,10 @@ import axiosInstance from "@/utils/axios";
   const handleCheckout = async () => {
     try{
         const res = await axiosInstance.post('/api/order/create', JSON.parse(localStorage.getItem('cart')))
-        console.log(res);
+        if (res.data){
+          const order_code = res.data.order_code;
+          router.push({name: 'checkout', params: {order_code: order_code}})
+        }
     }catch(error){
         console.log(error);
     }

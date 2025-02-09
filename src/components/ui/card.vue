@@ -1,7 +1,7 @@
 <template>
-  <Card style="overflow: hidden">
+  <Card style="overflow: hidden; padding: 10px;">
     <template #header>
-      <img alt="user header" :src="photo" width="100%" height="300px" />
+      <img alt="user header" :src="photo" width="100%" height="300px" class="rounded-md"/>
     </template>
     <template #title>{{ name }}</template>
     <template #subtitle>{{ description }}</template>
@@ -12,9 +12,13 @@
     </template>
     <template #footer>
       <div class="flex gap-4 mt-1 justify-between items-center">
-        <button class="w-1/2 bg-red-400 px-5 py-2 rounded-md hover:bg-red-500" @click="removeFromCart">Remove</button>
+        <button class=" px-5 border border-red-500 rounded-md hover:bg-red-200 text-3xl" @click="removeFromCart">
+          <i class="fa-solid fa-minus"></i>
+        </button>
         <div class="font-bold text-3xl">{{ count }}</div>
-        <button class="w-1/2 bg-green-400 px-5 py-2 rounded-md hover:bg-green-500" @click="addToCart">Add</button>
+        <button class="px-5 border border-green-500 rounded-md hover:bg-green-200 text-3xl" @click="addToCart">
+          <i class="fa-solid fa-plus"></i>
+        </button>
       </div>
     </template>
   </Card>

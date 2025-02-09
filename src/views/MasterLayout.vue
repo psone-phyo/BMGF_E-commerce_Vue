@@ -16,7 +16,7 @@
       </Menubar>
   
       <!-- Content Section (Takes up Remaining Space) -->
-      <div class="flex-grow">
+      <div class="flex-grow mb-10 mx-5">
         <slot />
       </div>
 
@@ -46,7 +46,7 @@
 
 <script setup>
 import Menubar from 'primevue/menubar';
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import {useRouter} from 'vue-router';
 
 const router = useRouter(); 
@@ -63,6 +63,7 @@ const items = ref([
     },
     {
         label: 'Order',
+        command: () => {router.push({name: 'order'})}
     }
 ]);
 
@@ -70,6 +71,17 @@ const handleLogout = () => {
     localStorage.removeItem('Token');
     router.push('/login');
 }
+
+const middleware = () => {
+  if (!localStorage.getItem('Token')){
+    router.push({name: 'login'})
+  }
+}
+
+onMounted(()=>{
+  middleware();
+})
+
 </script >
 <style>
 
