@@ -1,6 +1,15 @@
 # BMGF_E-commerce_Vue
 BMGF E-Commerce is a Vue.js-based online shopping platform that allows users to browse products, add them to their cart, and complete purchases.
 
+AI Tools Used
+- Vue.js State Management – AI-enhanced recommendations (if applicable).
+- Github Copilot – Used for generating code snippets, debugging api errors, debugging component errors, generating some UI and code style design.
+- ChatGPT for Vue.js – Used for generating Vue components, handling state management solutions, debugging frontend issues, and improving UI/UX elements.
+
+Known Limitations & Incomplete Features
+- Frontend Enhancements – Some UI elements require further refinement, should be more interactive, reactive like a modern webiste and irresponsive for the table UI view.
+- Testing – Additional unit and integration tests are needed to ensure reliability.
+
 🚀 Features
 
 Product listing with images, descriptions, and prices
