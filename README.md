@@ -20,6 +20,7 @@ Font Awesome icons
 1. Clone the Repository
 
 git clone https://github.com/psone-phyo/BMGF_E-commerce_Vue.git
+
 cd BMGF_E-commerce_Vue
 
 2. Install Dependencies
