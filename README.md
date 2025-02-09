@@ -6,7 +6,7 @@ AI Tools Used
 - ChatGPT for Vue.js – Used for generating Vue components, handling state management solutions, debugging frontend issues, and improving UI/UX elements.
 
 Known Limitations & Incomplete Features
-- Frontend Enhancements – Some UI elements require further refinement, should be more interactive, reactive like a modern webiste and irresponsive for the table UI view.
+- Frontend Enhancements – Some UI elements require further refinement, should be more interactive, reactive like a modern webiste and unresponsive for the table UI view.
 - Testing – Additional unit and integration tests are needed to ensure reliability.
 
 🚀 Features
