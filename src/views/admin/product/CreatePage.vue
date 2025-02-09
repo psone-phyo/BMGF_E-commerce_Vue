@@ -99,7 +99,7 @@
           />
         </div>
 
-        <Button type="submit" :disabled="btndisabled">Update</Button>
+        <Button type="submit" :disabled="btndisabled">Create</Button>
       </Form>
     </div>
   </Layout>
